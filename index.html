@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrigo Vó Áurea 🐾</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: #0f172a; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; }
+        @media (min-width: 768px) { body { flex-direction: row; } }
+        
+        aside { background-color: #020617; width: 100%; border-bottom: 1px solid #1e293b; padding: 24px; flex-shrink: 0; }
+        @media (min-width: 768px) { aside { width: 280px; border-bottom: none; border-right: 1px solid #1e293b; } }
+        
+        .logo { font-size: 18px; font-weight: 800; margin-bottom: 32px; color: #fbbf24; letter-spacing: 1px; }
+        nav { display: flex; flex-direction: column; gap: 8px; }
+        .tab-btn { width: 100%; text-align: left; padding: 12px 16px; border-radius: 12px; border: none; font-weight: 500; font-size: 14px; cursor: pointer; transition: all 0.2s; background: transparent; color: #94a3b8; }
+        .tab-btn:hover { background-color: #0f172a; color: #f1f5f9; }
+        .tab-btn.active { background-color: #d97706; color: #ffffff; }
+        
+        main { flex: 1; padding: 24px; max-width: 900px; margin: 0 auto; width: 100%; }
+        @media (min-width: 768px) { main { padding: 40px; } }
+        
+        h1 { font-size: 30px; font-weight: 800; margin-bottom: 24px; color: #ffffff; }
+        h2 { font-size: 24px; font-weight: 700; margin-bottom: 16px; color: #ffffff; }
+        p.subtitle { color: #94a3b8; font-size: 14px; margin-top: -16px; margin-bottom: 24px; }
+        
+        .card { background-color: #020617; padding: 24px; border-radius: 16px; border: 1px solid #1e293b; margin-bottom: 20px; }
+        .search-group { display: flex; flex-direction: column; gap: 12px; }
+        @media (min-width: 640px) { .search-group { flex-direction: row; } }
+        
+        input { flex: 1; background-color: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 12px 16px; font-size: 16px; color: #ffffff; outline: none; }
+        .btn-primary { background-color: #d97706; color: #ffffff; font-weight: 600; padding: 14px 24px; border-radius: 12px; border: none; cursor: pointer; font-size: 16px; transition: background 0.2s; }
+        .btn-primary:hover { background-color: #b45309; }
+        .btn-gov { background-color: #1351b4; color: #ffffff; font-weight: 700; padding: 14px 24px; border-radius: 12px; border: none; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+        
+        .tab-content { display: none; }
+        .tab-content.block { display: block; }
+        
+        .pet-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
+        .pet-card { background: #020617; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; }
+        .pet-card img { width: 100%; height: 180px; object-fit: cover; }
+        .pet-card-body { padding: 16px; }
+        .pet-card-body h4 { color: #fbbf24; font-size: 16px; margin-bottom: 6px; }
+        .pet-card-body p { font-size: 13px; color: #94a3b8; line-height: 1.4; }
+
+        .chat-box { background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 16px; height: 300px; overflow-y: auto; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px; border-radius: 8px; font-size: 14px; max-width: 85%; }
+        .msg-ia { background-color: #1e293b; color: #cbd5e1; align-self: flex-start; }
+        .msg-user { background-color: #d97706; color: #ffffff; align-self: flex-end; }
+
+        .phrase-display { background-color: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 32px 24px; text-align: center; margin-bottom: 20px; min-height: 140px; display: flex; align-items: center; justify-content: center; }
+        .phrase-text { font-size: 20px; font-weight: 600; color: #f59e0b; line-height: 1.5; font-style: italic; transition: opacity 0.2s; }
+
+        #gameArea { text-align: center; padding: 30px; background: #0f172a; border-radius: 12px; border: 1px solid #1e293b; }
+        .pet-target { font-size: 80px; cursor: pointer; user-select: none; display: inline-block; transition: transform 0.1s; }
+        .pet-target:active { transform: scale(1.25); }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="logo">VÓ ÁUREA 🐾</div>
+        <nav>
+            <button onclick="switchTab('tab-home')" id="btn-tab-home" class="tab-btn active">Animais & Cuidados</button>
+            <button onclick="switchTab('tab-pix')" id="btn-tab-pix" class="tab-btn">Doar via Gov.br / Pix</button>
+            <button onclick="switchTab('tab-ia')" id="btn-tab-ia" class="tab-btn">Assistente do Abrigo</button>
+            <button onclick="switchTab('tab-jogo')" id="btn-tab-jogo" class="tab-btn">Mini Jogo 🐶</button>
+            <button onclick="switchTab('tab-sabedoria')" id="btn-tab-sabedoria" class="tab-btn">Sabedoria</button>
+        </nav>
+    </aside>
+
+    <main>
+        <!-- ABA ANIMAIS -->
+        <section id="tab-home" class="tab-content block">
+            <h1>Animais Atendidos e Procedimentos</h1>
+            <p class="subtitle">Registros reais dos procedimentos veterinários e rotina do abrigo.</p>
+            <div class="pet-gallery">
+                <div class="pet-card">
+                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500" alt="Cão Max">
+                    <div class="pet-card-body">
+                        <h4>Max (Cão Resgatado)</h4>
+                        <p><strong>Procedimento:</strong> Vacinação múltipla, tratamento ortopédico na pata e suplementação diária.</p>
+                    </div>
+                </div>
+                <div class="pet-card">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500" alt="Gata Luna">
+                    <div class="pet-card-body">
+                        <h4>Luna (Gata Resgatada)</h4>
+                        <p><strong>Procedimento:</strong> Castração realizada, internação pós-operatória e vermifugação.</p>
+                    </div>
+                </div>
+                <div class="pet-card">
+                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=500" alt="Thor Filhote">
+                    <div class="pet-card-body">
+                        <h4>Thor (Filhote)</h4>
+                        <p><strong>Procedimento:</strong> Tratamento de desnutrição severa, desparasitação e alimentação especial.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA PIX -->
+        <section id="tab-pix" class="tab-content">
+            <h1>Apoie o Abrigo Vó Áurea</h1>
+            <p class="subtitle">Validação com login do Gov.br e transferência segura por Pix.</p>
+            <div class="card">
+                <h3 style="margin-bottom: 12px; color: #38bdf8;">1. Login Gov.br Obrigatório</h3>
+                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">Realize o login para autenticar o doador antes da emissão do comprovante:</p>
+                <a href="https://sso.acesso.gov.br/login" target="_blank" class="btn-gov">🔒 Login Obrigatório no GOV.BR</a>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 12px; color: #fbbf24;">2. Chave Pix Oficial (CNPJ)</h3>
+                <div style="text-align: center; padding: 10px;">
+                    <div style="font-size: 24px; font-weight: 800; font-family: monospace; color: #34d399; letter-spacing: 2px;">66916269000120</div>
+                    <p style="color: #94a3b8; font-size: 13px; margin-top: 8px;">Titular: Abrigo Vó Áurea - Proteção Animal</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA CHAT / ASSISTENTE -->
+        <section id="tab-ia" class="tab-content">
+            <h2>Assistente do Abrigo</h2>
+            <p class="subtitle">Tire dúvidas sobre os procedimentos dos animais e doações.</p>
+            <div class="card">
+                <div class="chat-box" id="chatBoxAbrigo">
+                    <div class="msg msg-ia">Olá! Sou a assistente do Abrigo Vó Áurea. Como posso ajudar com os nossos resgatados hoje?</div>
+                </div>
+                <div class="search-group">
+                    <input type="text" id="inputAbrigo" placeholder="Digite sua pergunta..." onkeypress="if(event.key === 'Enter') enviarPergunta()">
+                    <button onclick="enviarPergunta()" class="btn-primary">Enviar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA MINI JOGO -->
+        <section id="tab-jogo" class="tab-content">
+            <h2>Alimente o Pet 🍖</h2>
+            <p class="subtitle">Clique no cãozinho para alimentar!</p>
+            <div class="card">
+                <div id="gameArea">
+                    <div class="pet-target" onclick="alimentarPet()">🐶</div>
+                    <h3 style="margin-top: 16px;">Rações Dadas: <span id="score" style="color: #fbbf24;">0</span></h3>
+                    <p id="gameMsg" style="color: #38bdf8; margin-top: 12px; font-weight: 600; font-size: 18px; min-height: 28px;">
+                        Clique para dar ração!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA SABEDORIA -->
+        <section id="tab-sabedoria" class="tab-content">
+            <h2>Sabedoria 🐾</h2>
+            <p class="subtitle">Clique no botão para gerar pensamentos inéditos sobre proteção animal.</p>
+            <div class="card" style="text-align: center;">
+                <div class="phrase-display">
+                    <p id="phraseBox" class="phrase-text">Clique no botão abaixo para gerar uma reflexão!</p>
+                </div>
+                <button onclick="gerarNovaFrase()" id="btnGerarFrase" class="btn-primary" style="width: 100%; max-width: 320px;">
+                    Gerar Frase
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Alternância de abas
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        // Chat do Abrigo
+        async function enviarPergunta() {
+            const input = document.getElementById('inputAbrigo');
+            const texto = input.value.trim();
+            if (!texto) return;
+
+            const chatBox = document.getElementById('chatBoxAbrigo');
+            chatBox.innerHTML += `<div class="msg msg-user">${texto}</div>`;
+            input.value = '';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mensagem: texto })
+                });
+                
+                const dados = await response.json();
+                chatBox.innerHTML += `<div class="msg msg-ia">${dados.resposta}</div>`;
+            } catch (error) {
+                chatBox.innerHTML += `<div class="msg msg-ia">Erro de comunicação com a assistente.</div>`;
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Gerar Sabedoria
+        async function gerarNovaFrase() {
+            const phraseBox = document.getElementById('phraseBox');
+            phraseBox.style.opacity = '0.4';
+
+            try {
+                const response = await fetch('/api/sabedoria', { method: 'POST' });
+                const dados = await response.json();
+                phraseBox.innerText = dados.resposta;
+            } catch (error) {
+                phraseBox.innerText = "A compaixão pelos animais transforma vidas.";
+            } finally {
+                phraseBox.style.opacity = '1';
+            }
+        }
+
+        // Mini Jogo
+        let score = 0;
+        async function alimentarPet() {
+            score++;
+            document.getElementById('score').innerText = score;
+
+            try {
+                const response = await fetch('/api/reacao-jogo', { method: 'POST' });
+                const dados = await response.json();
+                document.getElementById('gameMsg').innerText = dados.reacao;
+            } catch (error) {
+                document.getElementById('gameMsg').innerText = "Au au! 🐾";
+            }
+        }
+    </script>
+</body>
+</html>
